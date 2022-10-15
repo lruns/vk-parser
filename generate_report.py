@@ -1,7 +1,9 @@
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
+import config
 
-user_nick = 'justonlyfun'
+user_nick = config.user_nick
+user_name = config.user_name
 
 liked_posts = pd.read_csv(f"parsed_data/{user_nick}/liked_posts.csv", sep=",")
 created_posts = pd.read_csv(f"parsed_data/{user_nick}/created_posts.csv", sep=",")
@@ -13,7 +15,7 @@ environment = Environment(loader=FileSystemLoader('templates'))
 template_name = "report_template.html"
 template = environment.get_template(template_name)
 context = {
-    "user": "Alexey Ortin",
+    "user": user_name,
     "liked_posts": liked_posts.to_dict('records'),
     "created_posts": created_posts.to_dict('records'),
     "reposted_posts": reposted_posts.to_dict('records'),
