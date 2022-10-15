@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report of a {{user}}</title>
+    <style>
+        .post {
+            display:inline-block;
+        }
+
+        .post img {
+            display:block;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?169"></script>
+    <h1>Статистика пользователя - {{user}}</h1>
+    <h2>Понравившейся посты</h2>
+    {% for post in liked_posts %}
+    <p><a href="{{'https://vk.com/wall{0}_{1}'.format(post['source_id'], post['post_id'])}}">{{post['text'][:75]}}</a>.</p>
+    {% endfor %}
+    <h2>Созданные пользователем посты</h2>
+        <div id="posts">
+            {% for post in created_posts %}
+            <div class="post" id="vk_post_{{post['owner_id']}}_{{post['id']}}"></div>
+            <script type="text/javascript">
+                (function() {
+                    VK.Widgets.Post("vk_post_{{post['owner_id']}}_{{post['id']}}", {{post['owner_id']}}, {{post['id']}}, '{{post['hash']}}', {width: 500});
+                }());
+            </script>
+            {% endfor %}
+        </div>
+    <h2>Посты, которые сохранил пользователь у себя на странице</h2>
+        <div id="posts">
+        {% for post in reposted_posts %}
+            <div class="post" id="vk_post_{{post['owner_id']}}_{{post['id']}}"></div>
+            <script type="text/javascript">
+                (function() {
+                    VK.Widgets.Post("vk_post_{{post['owner_id']}}_{{post['id']}}", {{post['owner_id']}}, {{post['id']}}, '{{post['hash']}}', {width: 500});
+                }());
+            </script>
+        {% endfor %}
+        </div>
+    <h2>Комментарии пользователя</h2>
+    {% for comment in comments %}
+        <p><q>{{comment["text"]}}</q> - <a href="{{'https://vk.com/wall{0}_{1}'.format(comment['owner_id'], comment['post_id'])}}">ссылка на пост</a>.</p>
+    {% endfor %}
+
+</body>
+</html>
